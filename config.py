@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import json
 import os
 
 load_dotenv()
@@ -10,15 +11,9 @@ class Config(object):
 
     TOKEN = os.environ.get('TOKEN')
     CHAT_ID = os.environ.get('CHAT_ID')
+    with open("categories.json", encoding="UTF-8") as f:
+        CATEGORIES = json.load(f)
 
-    CATEGORIES = {
-       "Кино🎞️":2,
-       "Музыка🎻":4,
-       "Видеоигры🕹️":15,
-       "Живопись/арт 🖌️":5,
-       "Общественная жизнь👥":6,
-       "Театр🎭":7,
-       "Литература📚":8,
-       "Спорт⛹️":9,
-       "Другое⚖️":10
-    }
+    def update_categories():
+        with open("categories.json", "w", encoding="UTF-8") as f:
+            json.dump(Config.CATEGORIES, f, ensure_ascii=False, indent=4)

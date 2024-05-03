@@ -45,7 +45,7 @@ async def set_category_handler(message: Message, state: FSMContext):
     await state.update_data(category=message.text)
     await state.set_state(offerNews.text)
     await message.answer(
-        "Напишите текст новости: ",
+        "Напишите текст новости(можно также добавить одну фотографию): ",
         reply_markup=ReplyKeyboardRemove()
     )
 
@@ -55,14 +55,14 @@ async def unknown_category_handler(message: Message):
     
 @main_router.message(offerNews.text)
 async def set_category_handler(message: Message, state: FSMContext):
-    data = await state.update_data(text=message.text)
+    data = await state.update_data(text=message.text if message.text is not None else message.html_text)
     await state.clear()
     await message.answer(
         "Спасибо! Ваша новость добавлена в список.",
         reply_markup=ReplyKeyboardRemove()
     )
+    await post(message.bot, photo=message.photo, **data)
 
-    await post(message.bot, **data)
     print(f"{data["name"]} предложил новость в категории '{data["category"]} ':\n{data["text"]}")
 
 

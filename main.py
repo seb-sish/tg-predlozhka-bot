@@ -10,6 +10,7 @@ import logging
 import sys
 
 from handlers import main_router, admin_router
+from utils import start_process
 
 dp = Dispatcher(storage=MemoryStorage())
 
@@ -28,12 +29,13 @@ def add_routers(dp):
 async def main() -> None:
     bot = Bot(Config.TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     await set_default_commands(bot)
-
+    await start_process(bot)
+    
     add_routers(dp)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
-
+    
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
