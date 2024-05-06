@@ -20,14 +20,14 @@ class offerNews(StatesGroup):
 
 @main_router.message(CommandStart())
 async def start_handler(message: Message):
-    await message.answer(f"Здравствуйте! Здесь вы можете предложить новость, для этого нажмите на кнопку ниже!", 
+    await message.answer(f"Если у вас есть новость, то вы можете написать ее в этом боте. Мы все посмотрим, и если будет интересно, то расскажем в выпуске", 
                          reply_markup=kb_start)
 
 @main_router.message(F.text == "Предложить новость")
 async def offerNews_handler(message: Message, state: FSMContext):
     await state.set_state(offerNews.name)
     await message.answer(
-        "Укажите своё имя: ",
+        "Как вас зовут? Нам правда интересно)",
         reply_markup=ReplyKeyboardRemove(),
     )
 
@@ -36,7 +36,7 @@ async def set_name_handler(message: Message, state: FSMContext):
     await state.update_data(name=message.text)
     await state.set_state(offerNews.category)
     await message.answer(
-        "Выберите категорию новости: ",
+        "По какой теме у вас новость?",
         reply_markup=kb_categories
     )
 
@@ -45,7 +45,7 @@ async def set_category_handler(message: Message, state: FSMContext):
     await state.update_data(category=message.text)
     await state.set_state(offerNews.text)
     await message.answer(
-        "Напишите текст новости(можно также добавить одну фотографию): ",
+        "А что случилось(если вкратце)? Можете прикрепить фотокарточку, если это поможет лучше описать ситуацию",
         reply_markup=ReplyKeyboardRemove()
     )
 
@@ -58,7 +58,7 @@ async def set_category_handler(message: Message, state: FSMContext):
     data = await state.update_data(text=message.text if message.text is not None else message.html_text)
     await state.clear()
     await message.answer(
-        "Спасибо! Ваша новость добавлена в список.",
+        "Спасибо! Мы обязательно ознакомимся!",
         reply_markup=ReplyKeyboardRemove()
     )
     await post(message.bot, photo=message.photo, **data)
