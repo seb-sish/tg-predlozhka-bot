@@ -8,5 +8,5 @@ kb_start = ReplyKeyboardMarkup(keyboard=[[offerBtn]], resize_keyboard=True, one_
 categories_builder = ReplyKeyboardBuilder()
 for category in Config.CATEGORIES.keys():
     categories_builder.add(KeyboardButton(text=category))
-categories_builder.adjust(2, 2, 2, 2, 1)
+categories_builder.adjust(2, 2, 2, 2, 2, 1)
 kb_categories = categories_builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
